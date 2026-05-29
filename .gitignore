@@ -1,2 +1,10 @@
+# AI agent local files
 CLAUDE.local.md
+GEMINI.local.md
+AGENTS.local.md
 .claude/
+.gemini/
+.context/
+.aider*
+.continue/
+.cursor/
