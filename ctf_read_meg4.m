@@ -439,20 +439,3 @@ else
 end;
 
 return
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% -------------------------------------------------------
-function sensorName = parse_sensor_label(temp)
-
-% sensorName = parse_sensor_label(temp)
-% parse sensor label names
-
-temp(temp>127) = 0;
-temp(temp<0) = 0;
-temp = strtok(temp,char(0));
-temp = strtok(temp,'-');
-sensorName = char(temp)';
-
-return

@@ -75,7 +75,7 @@ function [ctf] = ctf_read_res4(folder,VERBOSE,COEFS);
 % $Revision: 1.1 $ $Date: 2009-01-30 03:49:27 $
 
 % Copyright (C) 2003  Darren L. Weber
-% 
+% Copyright (C) 2026 Wenjing Chen
 % This program is free software; you can redistribute it and/or
 % modify it under the terms of the GNU General Public License
 % as published by the Free Software Foundation; either version 2
@@ -92,6 +92,7 @@ function [ctf] = ctf_read_res4(folder,VERBOSE,COEFS);
 
 % Modified: 11/2003, Darren.Weber_at_radiology.ucsf.edu
 %                    - modified from NIH code readresfile.m
+% Modified: 06/2026, Wenjing Chen, to fix channel label parsing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 ver = '$Revision: 1.1 $';
@@ -274,7 +275,7 @@ ctf.sensor.info = struct(...
 
 % read channel names
 for chan = 1:ctf.setup.number_channels,
-    temp = fread(fid,32,'char');
+    temp = fread(fid,32,'uint8');
     ctf.sensor.info(chan).label = parse_sensor_label(temp);
 end
 
@@ -603,14 +604,16 @@ return
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % -------------------------------------------------------
 function sensorName = parse_sensor_label(temp)
-
-% sensorName = parse_sensor_label(temp)
-% parse sensor label names
-
-temp(temp>127) = 0;
-temp(temp<0) = 0;
-temp = strtok(temp,char(0));
-temp = strtok(temp,'-');
-sensorName = char(temp)';
-
+    temp = temp(:)';                        % force row vector
+    temp(temp > 127 | temp < 0) = 0;
+    nul = find(temp == 0, 1, 'first');
+    if ~isempty(nul)
+        temp = temp(1:nul);
+    end
+    s = char(temp);
+    dash = find(s == '-', 1, 'first');
+    if ~isempty(dash)
+        s = s(1:dash-1);
+    end
+    sensorName = s;
 return

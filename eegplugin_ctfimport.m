@@ -62,4 +62,4 @@ function vers = eegplugin_ctfimport(fig, trystrs, catchstrs)
     
     % create menus
     % ------------
-    uimenu( menu, 'label', 'From CTF folder (MEG)', 'callback', comcnt, 'separator', 'on' );
+    uimenu( menu, 'label', 'From CTF folder (MEG) -- RRI version', 'callback', comcnt, 'separator', 'on' );
